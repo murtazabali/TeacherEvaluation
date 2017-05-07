@@ -1,0 +1,32 @@
+﻿@model IEnumerable<WebApplication1.Models.Section>
+
+@{
+    ViewBag.Title = "SectionView";
+}
+
+<h2>Section</h2>
+<table class="table">
+    <tr>
+        <th>
+            Section
+        </th>
+      
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>            
+            <td>
+                @Html.ActionLink(item.Section1, "CourseView", new { id = item.SId })
+            </td>
+
+        </tr>
+    }
+
+</table>
+<br />
+<div class="navbar-collapse collapse">
+
+    <ul class="nav navbar-nav">
+        <li>@Html.ActionLink("Logout", "Login", "Account")</li>
+    </ul>
+</div>

@@ -1,0 +1,78 @@
+﻿@model WebApplication1.ViewModels.EvaluationViewModel
+
+@{
+    var grades = new List<String> { "A", "B", "C", "D" };
+}
+@{ 
+}
+<h3> Subject: @Model.courses.Select(a=>a.Title).Single()</h3>
+<table border="1" style="border-collapse:collapse; border-color:black; width:100%; font-family:'Segoe UI'; font-size:12px;">
+    <tr>
+        <th style="text-align:center">S #</th>
+        <th style="text-align:center">Question</th>
+        @foreach (var grade in grades)
+        {
+            <th style="text-align:center">@grade</th>
+        }
+    </tr>
+
+    @foreach (var ques in Model.questions)
+    {
+        <tr>
+            <td style="text-align:center">@ques.QId</td>
+            <td>@ques.Question1</td>
+            @foreach (var grade in grades)
+            {
+                <td align="center">
+                    @Model.courses.Single().Evaluations.Where(e => e.QId == ques.QId).Count(g => g.Grade.Equals(grade))
+                </td>
+            }
+        </tr>
+    }
+    <tr>
+        <td></td>
+        <td style="text-align:center; font-weight:bold; font-size:14px" >Total</td>
+        @foreach (var grade in grades)
+        {
+            <td style="text-align:center; font-weight:bold;font-size:14px">@Model.courses.Single().Evaluations.Where(a=>a.Grade == grade).Count()</td>
+        }
+    </tr>
+    <tr>
+        <td></td>
+        <td style="text-align:center; font-weight:bold; font-size:14px">Evaluators</td>
+        <td style="border-right:hidden"></td>
+        <td style="text-align:center; font-weight:bold;font-size:14px">@Model.courses.Single().Evaluations.GroupBy(a => a.Participant).Count()</td>
+        <td style="border-left:hidden"></td>
+        <td style="border-left:hidden"></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td style="text-align:center; font-weight:bold; font-size:14px">Percentage</td>
+        @{
+            double countCourse = Model.courses.Single().Evaluations.Select(a => a.Grade).Count();
+            foreach (var grade in grades)
+            {
+                double countPerCourse = Model.courses.Single().Evaluations.Where(a => a.Grade == grade).Count();
+                if (countCourse != 0 && countPerCourse != 0)
+                {
+                    double Percentage = Math.Round((countPerCourse / countCourse) * 100, 2);
+                    <td style="text-align:center; font-weight:bold;font-size:14px">@Percentage</td>
+                }
+                else
+                {
+                    double Percentage = 0.0;
+                    <td style="text-align:center; font-weight:bold;font-size:14px">@Percentage</td>
+                }
+            }
+
+        }
+    </tr>
+</table>
+<br />
+<div class="navbar-collapse collapse">
+    
+    <ul class="nav navbar-nav">
+        <li>@Html.ActionLink("Back", "CourseView" ,new { id = Session["secID"] }, "Home")</li>
+        <li>@Html.ActionLink("Logout", "Login", "Account")</li>
+    </ul>
+</div>

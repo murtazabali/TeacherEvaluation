@@ -1,0 +1,23 @@
+﻿@model WebApplication1.ViewModels.AccountViewModels
+
+@using (Html.BeginForm("LoggedIn", "Account", FormMethod.Post))
+{
+    <fieldset>
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <br />
+        @if (@ViewBag.Message != null)
+        {
+            <div>
+                <h3>Evaluation Already Done!</h3>
+            </div>
+        }
+        <br />
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>@Html.ActionLink("Logout", "Login", "Account")</li>
+            </ul>
+        </div>
+    </fieldset>
+}
+

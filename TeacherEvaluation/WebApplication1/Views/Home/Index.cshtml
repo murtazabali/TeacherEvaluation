@@ -1,0 +1,61 @@
+﻿@model WebApplication1.ViewModels.EvaluationViewModel
+
+@using WebApplication1.Models
+@{ 
+    TeacherEvalDBContext db = new TeacherEvalDBContext();
+    int secid = int.Parse(Session["SId"].ToString());
+    var courses = db.Courses.Where(c => c.SId == secid).ToList();
+}
+
+<form action="\Home\Save" method="post">
+    <br />
+    <table border="1" style="border-collapse:collapse; border-color:black; width:100%">
+        <tr>
+            <th>S #</th>
+            <th>Question</th>
+            @foreach (var item in Model.courses)
+            {
+                <th>@item.Teacher.Name</th>
+            }
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            @foreach (var item in Model.courses)
+            {
+                <th>@item.Title</th>
+            }
+        </tr>
+        @{
+            var grades = new List<String> { "A", "B", "C", "D" };
+        }
+        @foreach (var ques in Model.questions)
+        {
+            <tr>
+                <td>@ques.QId</td>
+                <td>@ques.Question1</td>
+                @foreach (var crs in courses)
+                {
+                    <td>
+                        <select name="evaluation">
+
+                            @foreach (var grade in grades)
+                            {
+                                <option value="@(crs.CId+":"+ques.QId+":"+grade)">@grade</option>
+                            }
+
+                        </select>
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+    <br />
+    <div class="navbar-collapse collapse">
+
+        <ul class="nav navbar-nav">
+            <li><input type="submit" value="Submit" class="btn btn-toolbar btn-success btn-lg"  /></li>
+            <li>@Html.ActionLink("Logout", "Login", "Account")</li>
+        </ul>
+    </div>
+</form>
